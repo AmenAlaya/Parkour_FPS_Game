@@ -13,7 +13,6 @@ namespace FirstPersonShooter.Controller
         [SerializeField] private Transform _groundDetactor;
         [SerializeField] private LayerMask _groundLayerMask;
 
-
         private Rigidbody _myRigidbody;
 
         private float _fovLerpSpeed = 8f;
@@ -42,8 +41,9 @@ namespace FirstPersonShooter.Controller
             bool jump = Input.GetKeyDown(_jumpKey);
 
             //States
-            Ray ray = new Ray(_groundDetactor.position, Vector3.down) ;
-            bool isGrounded = Physics.Raycast(ray, 0.1f,_groundLayerMask);
+            Ray ray = new Ray(_groundDetactor.position, Vector3.down);
+            bool isGrounded = Physics.Raycast(ray, 0.2f,_groundLayerMask);
+            Debug.DrawRay(_groundDetactor.position, Vector3.down,Color.red,1f) ;
             bool isjumping = jump && isGrounded;
             bool isSprinting = sprint && t_vMove > 0  && !isjumping && isGrounded;
 
