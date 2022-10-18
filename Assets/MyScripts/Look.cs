@@ -11,6 +11,7 @@ namespace FirstPersonShooter.Controller
 
         [SerializeField] private Transform _player;
         [SerializeField] private Transform _cams;
+        [SerializeField] private Transform _weapon;
 
         [SerializeField] private float _xSensivity;
         [SerializeField] private float _ySensivity;
@@ -26,6 +27,7 @@ namespace FirstPersonShooter.Controller
         {
             Set_Y();
             Set_X();
+
             Update_Cusor_Locked();
         }
 
@@ -43,10 +45,14 @@ namespace FirstPersonShooter.Controller
             float t_input = Input.GetAxis("Mouse Y") * _ySensivity * Time.deltaTime;
             Quaternion t_adj = Quaternion.AngleAxis(t_input, -Vector3.right);
             Quaternion t_deta = _cams.localRotation * t_adj;
+
             if (Quaternion.Angle(_camCenter, t_deta) < _maxAngle)
             {
                 _cams.localRotation = t_deta;
             }
+
+            _weapon.rotation = _cams.rotation;
+
         }
 
         void Update_Cusor_Locked()
