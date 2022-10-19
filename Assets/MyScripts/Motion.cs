@@ -7,6 +7,7 @@ namespace FirstPersonShooter.Controller
 {
     public class Motion : MonoBehaviour
     {
+        #region Variables
         [SerializeField] private float _speed = 10f;
         [SerializeField] private float _sprintModifier;
         [SerializeField] private Camera _normalCam;
@@ -24,43 +25,57 @@ namespace FirstPersonShooter.Controller
         private KeyCode _sprintKey = KeyCode.LeftShift;
         private KeyCode _jumpKey = KeyCode.Space;
 
+        private float _hMove;
+        private float _vMove;
+        private bool _isSprinting;
+        #endregion
+
+        #region MonoBehaviour CallBacks
         void Start()
         {
             _baseFov = _normalCam.fieldOfView;
             _myRigidbody = GetComponent<Rigidbody>();
         }
 
-        void FixedUpdate()
+        void Update()
         {
-            //Axis
-            float t_hMove = Input.GetAxisRaw("Horizontal");
-            float t_vMove = Input.GetAxisRaw("Vertical");
 
-            //Controller
+            //Controls
             bool sprint = Input.GetKey(_sprintKey);
             bool jump = Input.GetKeyDown(_jumpKey);
 
+
             //States
             Ray ray = new Ray(_groundDetactor.position, Vector3.down);
-            bool isGrounded = Physics.Raycast(ray, 0.2f,_groundLayerMask);
-            Debug.DrawRay(_groundDetactor.position, Vector3.down,Color.red,1f) ;
+            bool isGrounded = Physics.Raycast(ray, 0.2f, _groundLayerMask);
             bool isjumping = jump && isGrounded;
-            bool isSprinting = sprint && t_vMove > 0  && !isjumping && isGrounded;
+            _isSprinting = sprint && _vMove > 0 && !isjumping && isGrounded;
+
 
             //Jump
             if (isjumping)
             {
-                //i have to polish jump movement
                 _myRigidbody.AddForce(Vector3.up * _jumpForce);
             }
 
 
+        }
+
+        void FixedUpdate()
+        {
+            //Axis
+            _hMove = Input.GetAxisRaw("Horizontal");
+            _vMove = Input.GetAxisRaw("Vertical");
+
+
+
+
 
             float t_AdjustedSpeed = _speed;
-            if (isSprinting) t_AdjustedSpeed *= _sprintModifier;
+            if (_isSprinting) t_AdjustedSpeed *= _sprintModifier;
 
             //Movement
-            Vector3 t_dir = new Vector3(t_hMove, 0, t_vMove);
+            Vector3 t_dir = new Vector3(_hMove, 0, _vMove);
             t_dir.Normalize();
 
             Vector3 t_targetVelocety = transform.TransformDirection(t_dir) * t_AdjustedSpeed * Time.deltaTime;
@@ -68,7 +83,7 @@ namespace FirstPersonShooter.Controller
             _myRigidbody.velocity = t_targetVelocety;
 
             //Field Of view
-            if (isSprinting)
+            if (_isSprinting)
             {
                 _normalCam.fieldOfView = Mathf.Lerp(_normalCam.fieldOfView, _baseFov * _sprintFovModifier, Time.deltaTime * _fovLerpSpeed);
             }
@@ -79,4 +94,5 @@ namespace FirstPersonShooter.Controller
 
         }
     }
+    #endregion
 }

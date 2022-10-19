@@ -9,6 +9,7 @@ namespace FirstPersonShooter.Controller
     {
         public string name;
         public float damage;
+        public float aimSpeed;
         public int fireRate;
         public GameObject prefab;
 

@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Pistol
   damage: 1
+  aimSpeed: 20
   fireRate: 100
   prefab: {fileID: 6047349340734843662, guid: 8bcb496fdb1f9bd409d4a7fd7e7dc119, type: 3}

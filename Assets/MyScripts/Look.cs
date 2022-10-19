@@ -7,6 +7,7 @@ namespace FirstPersonShooter.Controller
 {
     public class Look : MonoBehaviour
     {
+        #region Variables
         public static bool cursorLocked = true;
 
         [SerializeField] private Transform _player;
@@ -18,6 +19,9 @@ namespace FirstPersonShooter.Controller
         [SerializeField] private float _maxAngle;
 
         private Quaternion _camCenter;
+        #endregion
+
+        #region MonoBhaviour CallBacks
         private void Start()
         {
             _camCenter = _cams.localRotation;
@@ -30,7 +34,9 @@ namespace FirstPersonShooter.Controller
 
             Update_Cusor_Locked();
         }
+        #endregion
 
+        #region Private Methods
         void Set_X()
         {
             float t_input = Input.GetAxis("Mouse X") * _xSensivity * Time.deltaTime;
@@ -79,4 +85,5 @@ namespace FirstPersonShooter.Controller
             }
         }
     }
+    #endregion
 }
